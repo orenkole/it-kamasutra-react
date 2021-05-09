@@ -34,7 +34,6 @@ const Login = (props) => {
     const onSubmit = (formData) => {
         props.login(formData.email, formData.password, formData.rememberMe)
     }
-    console.log(props)
     if(props.isAuth) {
         return <Redirect to={"/profile"} />
     }

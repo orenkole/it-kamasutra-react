@@ -4,7 +4,7 @@ import MyPosts from './MyPosts/MyPosts';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
 import * as  axios from 'axios';
 import { connect } from 'react-redux';
-import {getUserProfile, setUserProfile, getStatus, updateStatus, savePhoto} from "../../redux/profile-reducer";
+import {getUserProfile, setUserProfile, getStatus, updateStatus, savePhoto, saveProfile} from "../../redux/profile-reducer";
 import Profile from './Profile';
 import { Redirect, withRouter } from 'react-router-dom';
 import { userAPI } from '../../api/api';
@@ -47,6 +47,7 @@ class ProfileContainer extends React.Component {
           status={this.props.status}
           updateStatus={this.props.updateStatus} 
           savePhoto={this.props.savePhoto}
+          saveProfile={this.props.saveProfile}
         />
       </div>
     );
@@ -63,6 +64,6 @@ const mapStateToProps = (state) => {
 }
 
 export default compose(
-  connect(mapStateToProps, {getUserProfile, getStatus, updateStatus, savePhoto}),
+  connect(mapStateToProps, {getUserProfile, getStatus, updateStatus, savePhoto, saveProfile}),
   withRouter
 )(ProfileContainer)
