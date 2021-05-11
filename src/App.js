@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import NavBar from './components/Navbar/NavBar';
-import { Route, withRouter } from 'react-router-dom';
+import { Redirect, Route, withRouter } from 'react-router-dom';
 import UsersContainer from './components/Users/UsersContainer';
 import HeaderContainer from './components/Header/HeaderContainer';
 import LoginPage from './components/Login/Login';
@@ -19,8 +19,18 @@ const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileCo
 
 class App extends React.Component {
 
+  catchAllUnhandledErrors = (promiseRejectionEvent) => {
+    alert("Some error occured");
+    console.error(promiseRejectionEvent)
+  }
+
   componentDidMount() {
     this.props.initializeApp();
+    window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("unhandledrejection", this.catchAllUnhandledErrors)
   }
 
   render() {
@@ -32,6 +42,7 @@ class App extends React.Component {
         <HeaderContainer />
         <NavBar />
         <div className="app-wrapper-content" >
+          <Route exact path="/" render={() => <Redirect to="/profile" /> } />
           <Route path="/dialogs" render={withSuspense(DialogsContainer)} />
           <Route path="/profile/:userId?" render= {() => (
             <React.Suspense
@@ -42,6 +53,7 @@ class App extends React.Component {
           )} />
           <Route path="/users" render={() => <UsersContainer />} />
           <Route path="/login" render={() => <LoginPage />} />
+          <Route path="*" render={() => <div>404</div>} />
         </div>
       </div>
     );
@@ -50,7 +62,7 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => ({
   // connect in redux-store.js
-  initialized: state.app.initalized,
+  initialized: state.app.initialized,
 })
 
 const AppContainer = compose(
